@@ -1,0 +1,47 @@
+<div class="auth-container">
+    <div class="auth-card">
+      <h2>Iniciar Sesion</h2>
+
+      <form [formGroup]="form" (ngSubmit)="onSubmit()">
+
+        <div class="form-group">
+          <label for="email">Correo electronico</label>
+          <input id="email" type="email" formControlName="email"
+                 placeholder="usuario@ejemplo.com">
+          @if (form.get("email")?.invalid && form.get("email")?.touched) {
+            <span class="error-msg">Ingresa un correo valido</span>
+          }
+        </div>
+
+        <div class="form-group">
+          <label for="password">Contrasena</label>
+          <input id="password" type="password" formControlName="password"
+                 placeholder="Minimo 8 caracteres">
+          @if (form.get("password")?.invalid && form.get("password")?.touched) {
+            <span class="error-msg">La contrasena debe tener al menos 8 caracteres</span>
+          }
+        </div>
+
+        @if (errorMsg()) {
+          <div class="alert-error">{{ errorMsg() }}</div>
+        }
+
+        <button type="submit" [disabled]="form.invalid || cargando()">
+          {{ cargando() ? "Iniciando sesion..." : "Iniciar Sesion" }}
+        </button>
+
+      </form>
+
+      <div class="separador">
+        <span>o continua con</span>
+      </div>
+
+      <a href="http://localhost:3000/api/auth/google" class="btn-google">
+        Iniciar sesion con Google
+      </a>
+
+      <div class="auth-footer">
+        <p>No tienes cuenta? <a routerLink="/registro">Registrate</a></p>
+      </div>
+    </div>
+  </div>

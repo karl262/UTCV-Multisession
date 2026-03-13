@@ -1,0 +1,27 @@
+<div class="dashboard">
+    <header>
+      <h1>Dashboard</h1>
+      <button (click)="logout()" class="btn-logout">Cerrar Sesion</button>
+    </header>
+
+    <main>
+      @if (usuario()) {
+        <div class="welcome-card">
+          <h2>Bienvenido, {{ usuario()?.nombre }}!</h2>
+          <p>Email: {{ usuario()?.email }}</p>
+          <p>Rol: <span class="badge">{{ usuario()?.rol }}</span></p>
+        </div>
+      }
+
+      @if (perfilData()) {
+        <div class="info-card">
+          <h3>Datos del servidor (ruta protegida /api/auth/perfil):</h3>
+          <pre>{{ perfilData() | json }}</pre>
+        </div>
+      }
+
+      <button (click)="cargarPerfil()" class="btn-primary">
+        Cargar Perfil desde el Servidor
+      </button>
+    </main>
+  </div>

@@ -1,0 +1,10 @@
+.dashboard { font-family: Arial, sans-serif; }
+header { background:#1565C0; color:#fff; padding:1rem 2rem; display:flex; justify-content:space-between; align-items:center; }
+main { padding:2rem; }
+.welcome-card, .info-card { background:#fff; border-radius:8px; padding:1.5rem; margin-bottom:1rem; box-shadow:0 1px 4px rgba(0,0,0,.1); }
+.badge { background:#1565C0; color:#fff; padding:.2rem .6rem; border-radius:12px; font-size:.85rem; }
+pre { background:#f5f5f5; padding:1rem; border-radius:4px; overflow-x:auto; }
+.btn-logout { background:transparent; color:#fff; border:1px solid rgba(255,255,255,.5); padding:.5rem 1rem; border-radius:4px; cursor:pointer; }
+.btn-logout:hover { background:rgba(255,255,255,.1); }
+.btn-primary { background:#1565C0; color:#fff; border:none; padding:.8rem 1.5rem; border-radius:4px; cursor:pointer; font-size:1rem; }
+.btn-primary:hover { background:#0D47A1; }
