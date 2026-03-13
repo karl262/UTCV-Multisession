@@ -1,0 +1,82 @@
+version: "3.9"
+
+services:
+
+  # ── BASE DE DATOS POSTGRESQL ──────────────────────────────────────────
+  postgres:
+    image: postgres:16
+    container_name: ms_postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ms_user
+      POSTGRES_PASSWORD: Ms_Passw0rd_2025
+      POSTGRES_DB: ms_db
+    ports:
+      - "5433:5432"
+    volumes:
+      - ms_pgdata:/var/lib/postgresql/data
+      - ./backend/sql/init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - ms_network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ms_user -d ms_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ── ADMINER (ADMIN VISUAL DE BD) ──────────────────────────────────────
+  adminer:
+    image: adminer:latest
+    container_name: ms_adminer
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    networks:
+      - ms_network
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  # ── BACKEND NODE.JS ───────────────────────────────────────────────────
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: ms_backend
+    restart: unless-stopped
+    env_file:
+      - ./backend/.env
+    ports:
+      - "3000:3000"
+    networks:
+      - ms_network
+    depends_on:
+      postgres:
+        condition: service_healthy
+    volumes:
+      - ./backend/src:/app/src   # hot-reload en desarrollo
+
+  # ── FRONTEND ANGULAR ──────────────────────────────────────────────────
+  frontend:
+    build:
+      context: ./frontend/y
+      dockerfile: Dockerfile
+    container_name: ms_frontend
+    restart: unless-stopped
+    ports:
+      - "4200:4200"
+    networks:
+      - ms_network
+    depends_on:
+      - backend
+
+# ── VOLUMENES ─────────────────────────────────────────────────────────────
+volumes:
+  ms_pgdata:
+    name: ms_pgdata
+
+# ── RED INTERNA ───────────────────────────────────────────────────────────
+networks:
+  ms_network:
+    name: ms_network
+    driver: bridge
